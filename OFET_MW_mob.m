@@ -43,9 +43,15 @@ for y = 1:2
 end
 
 % bls = regress(A(2,:),[ones(1,92) A(1,:)]);
-brob = robustfit(A(1,:),A(2,:));
 
-scatter(A(1,:),A(2,:));
+% Right here, you need to add something that turns this into log(A). I
+% think you could just do A= log(A)
+
+brob = robustfit(A(1,:),A(2,:));
+disp(brob)
+disp(x)
+
+loglog(A(1,:),A(2,:),'ob');
 grid on;
 hold on;
 title('Mobility vs Mn')
@@ -53,6 +59,6 @@ xlabel('Mn')
 ylabel('Mobility')
 % 
 % plot(A(1,:),bls(1)+bls(2)*x,'r','LineWidth',2);
-plot(A(1,:),brob(1)+brob(2)*x,'g','LineWidth',2)
+plot(A(1,:),brob(1)+brob(2).*A(1,:),'og')
 
 legend('Data','Ordinary Least Squares','Robust Regression')
