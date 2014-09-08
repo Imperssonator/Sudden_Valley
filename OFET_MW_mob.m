@@ -6,6 +6,7 @@ A = [];
 for x = 1:length(OFETcopy)
     A(1,x) = OFETcopy(x).Mn;
     A(2,x) = OFETcopy(x).RTMob;
+    A(3,x) = OFETcopy(x).HR;
 end
     
 testifvec = [];
@@ -46,19 +47,21 @@ end
 
 % Right here, you need to add something that turns this into log(A). I
 % think you could just do A= log(A)
-
-brob = robustfit(A(1,:),A(2,:));
+X = [ones(length(A),1) log(A(1,:)') log(A(3,:))'];
+M = log(A(2,:)');
+[brob, bint, r,rint,stats] = regress(M,X);
 disp(brob)
-disp(x)
-
-loglog(A(1,:),A(2,:),'ob');
-grid on;
-hold on;
-title('Mobility vs Mn')
-xlabel('Mn')
-ylabel('Mobility')
+% disp(x)
+disp(stats)
+% loglog(A(1,:),A(2,:),'ob');
+% %grid on;
+% hold on;
+% title('Mobility vs Mn')
+% xlabel('Mn')
+% ylabel('Mobility')
+% % 
+% % plot(A(1,:),bls(1)+bls(2)*x,'r','LineWidth',2);
+% Y = exp(brob(1)+brob(2).*log(A(1,:)));
+% plot(A(1,:),Y,'og')
 % 
-% plot(A(1,:),bls(1)+bls(2)*x,'r','LineWidth',2);
-plot(A(1,:),brob(1)+brob(2).*A(1,:),'og')
-
-legend('Data','Ordinary Least Squares','Robust Regression')
+% legend('Data','Ordinary Least Squares','Robust Regression')
