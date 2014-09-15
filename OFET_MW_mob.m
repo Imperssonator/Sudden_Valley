@@ -53,6 +53,15 @@ M = log(A(2,:)');
 disp(brob)
 % disp(x)
 disp(stats)
+
+% Aspun = A(:,1:69); %This section is to get a 3D scatter with different colors for each processing type
+% Adip = A(:,70:75);
+% Adrop = A(:,76:92);
+% hold on;
+% scatter3(Aspun(1,:),Aspun(3,:),Aspun(2,:),36,'blue')
+% scatter3(Adip(1,:),Adip(3,:),Adip(2,:),36,'red')
+% scatter3(Adrop(1,:),Adrop(3,:),Adrop(2,:),36,'green')
+
 % loglog(A(1,:),A(2,:),'ob');
 % %grid on;
 % hold on;
