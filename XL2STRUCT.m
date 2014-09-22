@@ -1,10 +1,15 @@
+
 clear all
 clc
 
 [ndata, text, alldata] = xlsread('OFET fab table copy.xlsx'); % all cells in spreadsheet saved as cell arrays in "alldata"
 [m1,n1] = size(alldata);
+disp(n1)
+first_blank_vec = cellfun(@isnan,alldata(12,3:end)); %vector of 0's and 1's that say whether there is a value for "BP" in that column
+last_filled = find(first_blank_vec,1,'first')+1; %returns the last column in "DIPPED", +1 is because I want last filled, not first blank
+disp(last_filled)
 OFET = struct(); % initialize the structure
-for i = 3:n1 %columns of spin coated devices, assumes that a plurality of devices are spun
+for i = 3:last_filled %columns of spin coated devices, assumes that a plurality of devices are spun
     for j = 1:29 % rows of process variables
         cat = alldata(j,2); % category = name of process variable in row j
         cellji = alldata(j,i); % store value of that process variable in cellji
@@ -16,6 +21,7 @@ end
 [m,n] = size(OFET);
 first_blank_vec = cellfun(@isnan,alldata(43,3:end)); %vector of 0's and 1's that say whether there is a value for "BP" in that column
 last_filled = find(first_blank_vec,1,'first')+1; %returns the last column in "DIPPED", +1 is because I want last filled, not first blank
+disp(last_filled)
 for i = 3:last_filled
     for j = 33:60
         cat = alldata(j,2);
