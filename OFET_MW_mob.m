@@ -17,6 +17,7 @@ testifvec = [];
 % count2 = 0;
 COUNT = zeros(m,1);
 
+%% Find NaNs in MW, BP, HR, RTMob...
 for y = 1:m
     for z = 1:n
         if(isnan(A(y,z)))
@@ -33,6 +34,7 @@ for y = 1:m
     end
 end
 
+%% Find Average values of the non-NaNs
 sums = sum(A,2);
 disp(sums)
 % avg_val(1) = sums(1)/(length(A)-count1); % compute average value of each parameter excluding NaNs
@@ -46,6 +48,7 @@ end
 disp(avg_val)
 % avg_val(2) = sums(2)/(length(A)-count2);
 
+%% Replace the NaNs
 for y = 1:m
     for z = 1:n
         if testifvec(y,z) == false
@@ -59,9 +62,32 @@ for y = 1:m
     end
 end
 
+%% Add Spun, Dipped, or Dropped as x, y and z
+% first we assign relative weights to each process. A higher weight means
+% it allows more time for solvent evaporation. These are paratmeters that
+% we will also have to change.
+spun = 1;
+dipped = 2;
+dropped = 3;
+Proc_Vec = []; % initialize where we will store the values
+
+for ii = 1:length(OFETcopy)
+    if isequal(OFETcopy(ii).CoatProc,'Spun')
+        Proc_Vec(ii)=spun;
+    elseif isequal(OFETcopy(ii).CoatProc,'Dipped')
+        Proc_Vec(ii)=dipped;
+    elseif isequal(OFETcopy(ii).CoatProc,'Dropped')
+        Proc_Vec(ii)=dropped;
+    end
+end
+
+A = [A; Proc_Vec];
 %disp(A)
-whos A
-sum(find(A(4)==0))
+
+%% Diagnostics
+%disp(A)
+% whos A
+% sum(find(A(4)==0))
 % bls = regress(A(2,:),[ones(1,92) A(1,:)]);
 
 % Right here, you need to add something that turns this into log(A). I
@@ -71,16 +97,25 @@ sum(find(A(4)==0))
 X = [ones(length(A),1) log(A(1,:)') log(A(4,:)')]; % doing a regression against MW and HR
 M = log(A(2,:)'); % mobility
 [brob, bint, r,rint,stats] = regress(M,X);
-SUMSQ = sum(r.^2)
+SUMSQ = sum(r.^2);
 disp(brob)
 % disp(x)
 disp(stats)
+
+%% Logarithmic Model 3 parameter
+X = [ones(length(A),1) log(A(1,:)') log(A(4,:)') log(A(5,:)')]; % doing a regression against MW and BP and Process
+M = log(A(2,:)'); % mobility
+[brob3, bint3, r3,rint3,stats3] = regress(M,X);
+SUMSQ3 = sum(r3.^2);
+disp(brob3)
+% disp(x)
+disp(stats3)
 
 %% Linear Model
 X1 = [ones(length(A),1) A(1,:)' A(4,:)'];
 M1 = A(2,:)';
 [brob1, bint1, r1, rint1, stats1] = regress(M1,X1);
-SUMSQ1 = sum(r1.^2)
+SUMSQ1 = sum(r1.^2);
 disp(brob1)
 disp(stats1)
 
