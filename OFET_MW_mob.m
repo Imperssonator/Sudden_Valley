@@ -66,18 +66,18 @@ end
 % first we assign relative weights to each process. A higher weight means
 % it allows more time for solvent evaporation. These are paratmeters that
 % we will also have to change.
-spun = 1;
-dipped = 2;
-dropped = 3;
-Proc_Vec = []; % initialize where we will store the values
+Proc_Vec = zeros(2,1); % initialize where we will store the values
+
+% Change the following so that Proc_Vec has two variables, which will go in
+% A(5,:) and A(6,:) 
 
 for ii = 1:length(OFETcopy)
     if isequal(OFETcopy(ii).CoatProc,'Spun')
-        Proc_Vec(ii)=spun;
+        Proc_Vec(:,ii)=[0; 0];
     elseif isequal(OFETcopy(ii).CoatProc,'Dipped')
-        Proc_Vec(ii)=dipped;
+        Proc_Vec(:,ii)=[1; 0];
     elseif isequal(OFETcopy(ii).CoatProc,'Dropped')
-        Proc_Vec(ii)=dropped;
+        Proc_Vec(:,ii)=[0; 1];
     end
 end
 
@@ -94,8 +94,10 @@ A = [A; Proc_Vec];
 % think you could just do A= log(A)
 
 %% Logarithmic Model
-X = [ones(length(A),1) log(A(1,:)') log(A(4,:)')]; % doing a regression against MW and HR
-M = log(A(2,:)'); % mobility
+disp('_____________')
+disp('Log regression over MW')
+X = [ones(69,1) log(A(1,1:69)')]; % doing a regression against MW only for spun
+M = log(A(2,1:69)'); % mobility
 [brob, bint, r,rint,stats] = regress(M,X);
 SUMSQ = sum(r.^2);
 disp(brob)
@@ -103,7 +105,9 @@ disp(brob)
 disp(stats)
 
 %% Logarithmic Model 3 parameter
-X = [ones(length(A),1) log(A(1,:)') log(A(4,:)') log(A(5,:)')]; % doing a regression against MW and BP and Process
+disp('_____________')
+disp('Log regression over MW and BP')
+X = [ones(length(A),1) log(A(1,:)') log(A(4,:)')]; % doing a regression against MW and BP
 M = log(A(2,:)'); % mobility
 [brob3, bint3, r3,rint3,stats3] = regress(M,X);
 SUMSQ3 = sum(r3.^2);
@@ -112,7 +116,9 @@ disp(brob3)
 disp(stats3)
 
 %% Linear Model
-X1 = [ones(length(A),1) A(1,:)' A(4,:)'];
+disp('_____________')
+disp('Linear regression with MW, BP, and two params for dip and drop')
+X1 = [ones(length(A),1) A(1,:)' A(4,:)' A(5,:)' A(6,:)'];
 M1 = A(2,:)';
 [brob1, bint1, r1, rint1, stats1] = regress(M1,X1);
 SUMSQ1 = sum(r1.^2);
