@@ -93,38 +93,63 @@ A = [A; Proc_Vec];
 % Right here, you need to add something that turns this into log(A). I
 % think you could just do A= log(A)
 
-%% Logarithmic Model
-disp('_____________')
-disp('Log regression over MW')
-X = [ones(69,1) log(A(1,1:69)')]; % doing a regression against MW only for spun
-M = log(A(2,1:69)'); % mobility
-[brob, bint, r,rint,stats] = regress(M,X);
-SUMSQ = sum(r.^2);
-disp(brob)
-% disp(x)
-disp(stats)
+% %% Logarithmic Model
+% disp('_____________')
+% disp('Log regression over MW')
+% X = [ones(69,1) log(A(1,1:69)')]; % doing a regression against MW only for spun
+% M = log(A(2,1:69)'); % mobility
+% [brob, bint, r,rint,stats] = regress(M,X);
+% SUMSQ = sum(r.^2);
+% disp(brob)
+% % disp(x)
+% disp(stats)
+% 
+% %% Logarithmic Model 3 parameter
+% disp('_____________')
+% disp('Log regression over MW and BP')
+% X = [ones(length(A),1) log(A(1,:)') log(A(4,:)')]; % doing a regression against MW and BP
+% M = log(A(2,:)'); % mobility
+% [brob3, bint3, r3,rint3,stats3] = regress(M,X);
+% SUMSQ3 = sum(r3.^2);
+% disp(brob3)
+% % disp(x)
+% disp(stats3)
+% 
+% %% Linear Model
+% disp('_____________')
+% disp('Linear regression with MW, BP, and two params for dip and drop')
+% X1 = [ones(length(A),1) A(1,:)' A(4,:)' A(5,:)' A(6,:)'];
+% M1 = A(2,:)';
+% [brob1, bint1, r1, rint1, stats1] = regress(M1,X1);
+% SUMSQ1 = sum(r1.^2);
+% disp(brob1)
+% disp(stats1)
+% 
 
-%% Logarithmic Model 3 parameter
+%% Linear Model for Parabolas
 disp('_____________')
-disp('Log regression over MW and BP')
-X = [ones(length(A),1) log(A(1,:)') log(A(4,:)')]; % doing a regression against MW and BP
-M = log(A(2,:)'); % mobility
-[brob3, bint3, r3,rint3,stats3] = regress(M,X);
-SUMSQ3 = sum(r3.^2);
-disp(brob3)
-% disp(x)
-disp(stats3)
-
-%% Linear Model
-disp('_____________')
-disp('Linear regression with MW, BP, and two params for dip and drop')
-X1 = [ones(length(A),1) A(1,:)' A(4,:)' A(5,:)' A(6,:)'];
-M1 = A(2,:)';
+disp('Linear regression with HR using 3-parameter Parabolic fit')
+Asquare = A.^2;
+X1 = [ones(7,1) A(3,29:35)' Asquare(3,29:35)'];
+M1 = A(2,29:35)';
 [brob1, bint1, r1, rint1, stats1] = regress(M1,X1);
 SUMSQ1 = sum(r1.^2);
 disp(brob1)
 disp(stats1)
 
+X2 = [ones(6,1) [A(3,29) A(3,36:40)]' [Asquare(3,29) Asquare(3,36:40)]'];
+M2 = [A(2,29) A(2,36:40)]';
+[brob2, bint2, r2, rint2, stats2] = regress(M2,X2);
+SUMSQ2 = sum(r2.^2);
+disp(brob2)
+disp(stats2)
+
+X3 = [ones(5,1) A(3,41:45)' Asquare(3,41:45)'];
+M3 = A(2,41:45)';
+[brob3, bint3, r3, rint3, stats3] = regress(M3,X3);
+SUMSQ3 = sum(r3.^2);
+disp(brob3)
+disp(stats3)
 
 % Aspun = A(:,1:69); %This section is to get a 3D scatter with different colors for each processing type
 % Adip = A(:,70:75);
