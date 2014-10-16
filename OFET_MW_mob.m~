@@ -150,26 +150,6 @@ A = [A; Proc_Vec];
 % disp(brob1)
 % disp(stats1)
 
-%% Linear Model for Individual Hansen Parameters
-
-% Your X1 will be [ones, AA(1,:)', AA(2,:)'....] so it will be N x 8, where
-% there are N devices, and 8 variables, thus there are 8 parameters in B
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 %% Linear Model for Parabolas
 disp('_____________')
 disp('Linear regression with HR using 3-parameter Parabolic fit')
