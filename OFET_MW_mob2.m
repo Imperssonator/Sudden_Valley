@@ -2,7 +2,7 @@ clear all
 close all
 clc
 
-XL2STRUCT
+XL2STRUCT;
 
 LOADED_STRUCT = load('OFET.mat');
 OFETcopy = LOADED_STRUCT.OFET;
@@ -182,55 +182,55 @@ A = [A; Proc_Vec; Proc_Vec2];
 % Your X1 will be [ones, AA(1,:)', AA(2,:)'....] so it will be N x 8, where
 % there are N devices, and 8 variables, thus there are 8 parameters in B
 
-disp('_____________')
-disp('Linear regression with 3 HR params for Solv1, 3 HR params for Solv2')
-X1 = [ones(length(A),1) A(1,:)' (A(4,:).^2)' (A(6,:).^2)' (A(7,:).^2)' (A(8,:).^2)' (A(9,:).^2)' (A(10,:).^2)' (A(11,:).^2)' A(13,:)' A(14,:)'];
-M1 = A(2,:)';
-[brob1, bint1, r1, rint1, stats1] = regress(M1,X1);
-SUMSQ1 = sum(r1.^2);
-disp(brob1)
-disp(stats1)
-
-
-
-% %% Linear Model for Parabolas
 % disp('_____________')
-% disp('Linear regression with HR using 3-parameter Parabolic fit')
-% Asquare = A.^2;
-% X1 = [ones(6,1) A(3,29:34)' Asquare(3,29:34)'];
-% M1 = A(2,29:34)';
+% disp('Linear regression with 3 HR params for Solv1, 3 HR params for Solv2')
+% X1 = [ones(length(A),1) A(1,:)' (A(4,:).^2)' (A(6,:).^2)' (A(7,:).^2)' (A(8,:).^2)' (A(9,:).^2)' (A(10,:).^2)' (A(11,:).^2)' A(13,:)' A(14,:)'];
+% M1 = A(2,:)';
 % [brob1, bint1, r1, rint1, stats1] = regress(M1,X1);
 % SUMSQ1 = sum(r1.^2);
 % disp(brob1)
 % disp(stats1)
-% figure %open a figure window... every plot command will overlay on this figure
-% hold on % plot commands actually automatically erase whatever is in the existing figure
-% plot(A(3,29:34),A(2,29:34),'og','MarkerSize',12) % first we plot the real data points
-% fplot(@(x) brob1(1)+brob1(2)*x+brob1(3)*x^2,[min(A(3,29:34)), max(A(3,29:34))]) % next we plot the model, Mobility = B1 + B2x + B3x^2
-% 
-% X2 = [ones(6,1) [A(3,29) A(3,35:39)]' [Asquare(3,29) Asquare(3,35:39)]'];
-% M2 = [A(2,29) A(2,35:39)]';
-% [brob2, bint2, r2, rint2, stats2] = regress(M2,X2);
-% SUMSQ2 = sum(r2.^2);
-% disp(brob2)
-% disp(stats2)
-% figure %open a figure window... every plot command will overlay on this figure
-% hold on % plot commands actually automatically erase whatever is in the existing figure
-% plot([A(3,29) A(3,35:39)],[A(2,29) A(2,35:39)],'og','MarkerSize',12) % first we plot the real data points
-% fplot(@(x) brob2(1)+brob2(2)*x+brob2(3)*x^2,[min([A(3,29) A(3,35:39)]), max([A(3,29) A(3,35:39)])]) % next we plot the model, Mobility = B1 + B2x + B3x^2
-% 
-% 
-% X3 = [ones(6,1) A(3,40:45)' Asquare(3,40:45)'];
-% M3 = A(2,40:45)';
-% [brob3, bint3, r3, rint3, stats3] = regress(M3,X3);
-% SUMSQ3 = sum(r3.^2);
-% disp(brob3)
-% disp(stats3)
-% figure %open a figure window... every plot command will overlay on this figure
-% hold on % plot commands actually automatically erase whatever is in the existing figure
-% plot(A(3,40:45),A(2,40:45),'og','MarkerSize',12) % first we plot the real data points
-% fplot(@(x) brob3(1)+brob3(2)*x+brob3(3)*x^2,[min(A(3,40:45)), max(A(3,40:45))]) % next we plot the model, Mobility = B1 + B2x + B3x^2
-% 
+
+
+
+%% Linear Model for Parabolas
+disp('_____________')
+disp('Linear regression with HR using 3-parameter Parabolic fit')
+Asquare = A.^2;
+X1 = [ones(6,1) A(3,29:34)' Asquare(3,29:34)'];
+M1 = A(2,29:34)';
+[brob1, bint1, r1, rint1, stats1] = regress(M1,X1);
+SUMSQ1 = sum(r1.^2);
+disp(brob1)
+disp(stats1)
+figure %open a figure window... every plot command will overlay on this figure
+hold on % plot commands actually automatically erase whatever is in the existing figure
+plot(A(3,29:34),A(2,29:34),'og','MarkerSize',12) % first we plot the real data points
+fplot(@(x) brob1(1)+brob1(2)*x+brob1(3)*x^2,[min(A(3,29:34)), max(A(3,29:34))]) % next we plot the model, Mobility = B1 + B2x + B3x^2
+
+X2 = [ones(6,1) [A(3,29) A(3,35:39)]' [Asquare(3,29) Asquare(3,35:39)]'];
+M2 = [A(2,29) A(2,35:39)]';
+[brob2, bint2, r2, rint2, stats2] = regress(M2,X2);
+SUMSQ2 = sum(r2.^2);
+disp(brob2)
+disp(stats2)
+figure %open a figure window... every plot command will overlay on this figure
+hold on % plot commands actually automatically erase whatever is in the existing figure
+plot([A(3,29) A(3,35:39)],[A(2,29) A(2,35:39)],'og','MarkerSize',12) % first we plot the real data points
+fplot(@(x) brob2(1)+brob2(2)*x+brob2(3)*x^2,[min([A(3,29) A(3,35:39)]), max([A(3,29) A(3,35:39)])]) % next we plot the model, Mobility = B1 + B2x + B3x^2
+
+
+X3 = [ones(6,1) A(3,40:45)' Asquare(3,40:45)'];
+M3 = A(2,40:45)';
+[brob3, bint3, r3, rint3, stats3] = regress(M3,X3);
+SUMSQ3 = sum(r3.^2);
+disp(brob3)
+disp(stats3)
+figure %open a figure window... every plot command will overlay on this figure
+hold on % plot commands actually automatically erase whatever is in the existing figure
+plot(A(3,40:45),A(2,40:45),'og','MarkerSize',12) % first we plot the real data points
+fplot(@(x) brob3(1)+brob3(2)*x+brob3(3)*x^2,[min(A(3,40:45)), max(A(3,40:45))]) % next we plot the model, Mobility = B1 + B2x + B3x^2
+
 
 % Aspun = A(:,1:69); %This section is to get a 3D scatter with different colors for each processing type
 % Adip = A(:,70:75);

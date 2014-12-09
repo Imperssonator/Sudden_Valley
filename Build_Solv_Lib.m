@@ -1,4 +1,3 @@
-clear all
 clc
 
 [ndata, text, alldata] = xlsread('Solvs.xlsx'); % all cells in spreadsheet saved as cell arrays in "alldata"
