@@ -8,20 +8,20 @@ LOADED_STRUCT = load('OFET.mat');
 OFETcopy = LOADED_STRUCT.OFET;
 %disp(OFETcopy)
 
-A = [];
+Data = [];
 Row_Contents = {'Mn'; 'RTMob'; 'HR'; 'BP'; 'Init Conc'}; % Keep track of what row contains what
 for x = 1:length(OFETcopy)
-    A(1,x) = OFETcopy(x).Mn;
-    A(2,x) = OFETcopy(x).RTMob;
-    A(3,x) = OFETcopy(x).HR;
-    A(4,x) = OFETcopy(x).BP;
-    A(5,x) = OFETcopy(x).InitConc;
+    Data(1,x) = OFETcopy(x).Mn;
+    Data(2,x) = OFETcopy(x).RTMob;
+    Data(3,x) = OFETcopy(x).HR;
+    Data(4,x) = OFETcopy(x).BP;
+    Data(5,x) = OFETcopy(x).InitConc;
 end
 
 %% Separate Hansen Parameters
 
 for x = 1:length(OFETcopy)
-    AA = Find_Hansen(OFETcopy);
+    HansenData = Find_Hansen(OFETcopy);
 end
 
 % AA is a 7xN matrix:
@@ -33,35 +33,37 @@ end
 % All of the d's are relative to P3HT. So P3HT is now the origin of Hansen
 % Space
 
-[AAr, AAc] = size(AA);
+[AAr, AAc] = size(HansenData);
 for d = 1:3
     for e = 1:AAc
-        AA(d,e) = AA(d,e) * AA(7,e);   %Multiply the effect of each HR parameter for Solv1 by its volume fraction
+        HansenData(d,e) = HansenData(d,e) * HansenData(7,e);   %Multiply the effect of each HR parameter for Solv1 by its volume fraction
     end
 end
+
+
 
 for d = 4:6
     for e = 1:AAc
-        AA(d,e) = AA(d,e) * (1-AA(7,e));   %Multiply the effect of each HR parameter for Solv2 by its volume fraction
+        HansenData(d,e) = HansenData(d,e) * (1-HansenData(7,e));   %Multiply the effect of each HR parameter for Solv2 by its volume fraction
     end
 end
 
-A = [A; AA];
-Row_Contents = {Row_Contents; 'dd1'; 'dp1'; 'dh1'; 'dd2'; 'dp2'; 'dh2'};
+Data = [Data; HansenData];
+Row_Contents = [Row_Contents; 'dd1'; 'dp1'; 'dh1'; 'dd2'; 'dp2'; 'dh2'];
 
 %% Deal with missing data
 % Currently using mean replacement...
 
-[m,n] = size(A); % m is number of parameters, n is number of devices
+[m,n] = size(Data); % m is number of parameters, n is number of devices
 
 testifvec = [];
 COUNT = zeros(m,1);
 
 for y = 1:m
     for z = 1:n
-        if(isnan(A(y,z)))
+        if(isnan(Data(y,z)))
             testifvec(y,z) = false;
-            A(y,z) = 0;
+            Data(y,z) = 0;
             %             if y == 1
             %                 count(1) = count(1) + 1;
             %             elseif y == 2
@@ -74,7 +76,7 @@ for y = 1:m
 end
 
 % Find Average values of the non-NaNs
-sums = sum(A,2);
+sums = sum(Data,2);
 %disp(sums)
 % avg_val(1) = sums(1)/(length(A)-count1); % compute average value of each parameter excluding NaNs
 % 
@@ -96,7 +98,7 @@ for y = 1:m
             %             elseif y == 2
             %                 A(y,z) = avg_val(2);
             %             end
-            A(y,z) = avg_val(y);
+            Data(y,z) = avg_val(y);
         end
     end
 end
@@ -122,11 +124,13 @@ end
 
 %% Prepare the Data Matrix
 
-A = [A; Proc_Vec];
+Data = [Data; Proc_Vec];
 
-Data = [A(1,:);A(3:5,:);A(13,:)]';
-R = A(2,:)';
+% Data = [A(1,:);A(3:5,:);A(13,:)]';
+Data = Data;
+R = Data(2,:)';
 
+end
 
 %% Junk
 % Proc_Vec2 = zeros(2,1);

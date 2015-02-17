@@ -1,8 +1,8 @@
-function [Data, R, Row_Contents] = Struct2Data()
-
 clear all
 close all
 clc
+
+XL2STRUCT;
 
 LOADED_STRUCT = load('OFET.mat');
 OFETcopy = LOADED_STRUCT.OFET;
@@ -55,6 +55,8 @@ Row_Contents = {Row_Contents; 'dd1'; 'dp1'; 'dh1'; 'dd2'; 'dp2'; 'dh2'};
 [m,n] = size(A); % m is number of parameters, n is number of devices
 
 testifvec = [];
+% count1 = 0;
+% count2 = 0;
 COUNT = zeros(m,1);
 
 for y = 1:m
@@ -73,7 +75,7 @@ for y = 1:m
     end
 end
 
-% Find Average values of the non-NaNs
+%% Find Average values of the non-NaNs
 sums = sum(A,2);
 %disp(sums)
 % avg_val(1) = sums(1)/(length(A)-count1); % compute average value of each parameter excluding NaNs
@@ -87,7 +89,7 @@ end
 %disp(avg_val)
 % avg_val(2) = sums(2)/(length(A)-count2);
 
-% Replace the NaNs
+%% Replace the NaNs
 for y = 1:m
     for z = 1:n
         if testifvec(y,z) == false
@@ -101,7 +103,7 @@ for y = 1:m
     end
 end
 
-%% Add Spun, Dipped, or Dropped as a continuous variable
+%% Add Spun, Dipped, or Dropped as x, y and z
 % first we assign relative weights to each process. A higher weight means
 % it allows more time for solvent evaporation. These are paratmeters that
 % we will also have to change.

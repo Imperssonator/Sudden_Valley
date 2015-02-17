@@ -12,7 +12,7 @@ for i = 1:length(SolvLib)
         X = i;
     end
 end
-disp(X)
+% disp(X)
 
 out = [SolvLib(X).dd; SolvLib(X).dp; SolvLib(X).dh];
 
