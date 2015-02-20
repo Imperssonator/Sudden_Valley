@@ -1,4 +1,4 @@
-function [REG, ERR] = Run_Regress(Data,R,WhichVars,N)
+function [REG, ERR] = Run_Regress(Data,R,WhichVars,N,polyDeg,VarNames)
 % Take filled-in data matrix as input, and vector of mobilities R, as well
 % as 'WhichVars', a row vector of which variables of Data to use, and N,
 % how many of those to use at a time at max
@@ -17,7 +17,7 @@ end
 disp(Combos)
 
 Len = length(Combos);
-ERR = zeros(Len,3);
+ERR = zeros(Len,polyDeg);
 count = 0;
 REG = struct();
 
@@ -26,13 +26,13 @@ REG = struct();
 % 3rd degree
 
 for i = 1:Len
-    for j = 1:3
+    for j = 1:polyDeg
         disp('____')
-        count = count+1;
         lmn = Combos{i};
         reg = MultiPolyRegress(Data(:,lmn),R,j);
         ERR(i,j) = reg.CVMAE;
-        REG(count).r = reg;
+        REG(i,j).r = reg;
+        REG(i,j).Vars = VarNames(lmn);
     end
 end
 

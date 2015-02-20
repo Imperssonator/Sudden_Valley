@@ -65,11 +65,6 @@ for y = 1:m
         if(isnan(Data(y,z)))
             testifvec(y,z) = false;
             Data(y,z) = 0;
-            %             if y == 1
-            %                 count(1) = count(1) + 1;
-            %             elseif y == 2
-            %                 count2 = count2 + 1;
-            %             end
             COUNT(y) = COUNT(y)+1; % count up how many NaNs exist for a particular parameter
         else testifvec(y,z) = true;
         end
@@ -78,27 +73,16 @@ end
 
 % Find Average values of the non-NaNs
 sums = sum(Data,2);
-%disp(sums)
-% avg_val(1) = sums(1)/(length(A)-count1); % compute average value of each parameter excluding NaNs
-% 
 avg_val = zeros(m,1);
-%disp(n)
-%disp(COUNT)
+
 for ii = 1:m
     avg_val(ii) = sums(ii)/(n-COUNT(ii));
 end
-%disp(avg_val)
-% avg_val(2) = sums(2)/(length(A)-count2);
 
 % Replace the NaNs
 for y = 1:m
     for z = 1:n
         if testifvec(y,z) == false
-            %             if y == 1
-            %                 A(y,z) = avg_val(1);
-            %             elseif y == 2
-            %                 A(y,z) = avg_val(2);
-            %             end
             Data(y,z) = avg_val(y);
         end
     end
@@ -115,16 +99,23 @@ Proc_Vec = zeros(1,1); % initialize where we will store the values
 
 for ii = 1:length(OFETcopy)
     if isequal(OFETcopy(ii).CoatProc,'Spun')
-        Proc_Vec(:,ii)=1;
+        Proc_Vec(1,ii)=1;
     elseif isequal(OFETcopy(ii).CoatProc,'Dipped')
-        Proc_Vec(:,ii)=2;
+        Proc_Vec(1,ii)=2;
     elseif isequal(OFETcopy(ii).CoatProc,'Dropped')
-        Proc_Vec(:,ii)=3;
+        Proc_Vec(1,ii)=3;
+    end
+    % Also add surface treatment
+    if isequal(OFETcopy(ii).SubsTreat,'HMDS')
+        Proc_Vec(2,ii) = 2;
+    elseif isequal(OFETcopy(ii).SubsTreat,'OTS')
+        Proc_Vec(2,ii) = 1;
+    else Proc_Vec(2,ii) = 0;
     end
 end
 
 Data = [Data; Proc_Vec];
-Row_Contents = [Row_Contents; 'Coating Process'];
+Row_Contents = [Row_Contents; 'Coating Process'; 'Surface Treatment'];
 
 %% Prepare the Data Matrix
 
