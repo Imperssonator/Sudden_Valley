@@ -84,11 +84,11 @@ function reg = MultiPolyRegress(Data,R,PW,varargin)
     end
     
     % Function Parameters
-    NData = size(Data,1);
-    NVars = size(Data,2);
+    NData = size(Data,1); % Number of points
+    NVars = size(Data,2); % Number of variables
     RowMultiB = '1';
     RowMultiC = '1';
-    Lim = max(PV);
+    Lim = max(PV);      % Highest degree of polynomial
     
     % Initialize
     A=zeros(Lim^NVars,NVars);
@@ -141,9 +141,12 @@ function reg = MultiPolyRegress(Data,R,PW,varargin)
   
     if p < size(Scores,2)
         warning('Rank Deficiency within Polynomial Terms!');
+        WARNING = 1;
         RR = RR(1:p,1:p);
         QQ = QQ(:,1:p);
         perm = perm(1:p);
+    else
+        WARNING = 0;
     end
     
 	% Ordinary Least Squares Regression
@@ -181,7 +184,7 @@ function reg = MultiPolyRegress(Data,R,PW,varargin)
         'Coefficients', b, 'Legend', Legend, 'yhat', yhat, 'Residuals', r, ...
         'GoodnessOfFit','-----------------', 'RSquare', r2, 'MAE', mae, 'MAESTD', maestd, ...
         'Normalization',NormalizationSwitch,'LOOCVGoodnessOfFit','-----------------', 'CVRSquare', ...
-        CVr2, 'CVMAE', CVmae, 'CVMAESTD', CVmaestd,'CVNormalization',NormalizationSwitch);
+        CVr2, 'CVMAE', CVmae, 'CVMAESTD', CVmaestd,'CVNormalization',NormalizationSwitch,'Warning',WARNING);
     
     % Optional Figure
     if strcmp(FigureSwitch,'figureon')==1

@@ -5,8 +5,10 @@ clc
 % This function converts the XLSX spreadsheet into a MATLAB struct
 
 [ndata, text, alldata] = xlsread('OFET fab table copy.xlsx'); % all cells in spreadsheet saved as cell arrays in "alldata"
+% ndata = numerical matrix of just numerical cells, alldata = cell array of
+% all information
 [m1,n1] = size(alldata);
-disp(n1)
+% disp(n1)
 
 OFET = struct(); % initialize the structure
 

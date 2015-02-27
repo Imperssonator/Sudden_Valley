@@ -32,7 +32,7 @@ for i = 1:Len
     for j = 1:polyDeg
         disp('____')
         lmn = Combos{i};
-        reg = MultiPolyRegress(Data(:,lmn),R,j);
+        reg = MultiPolyRegress(Data(:,lmn),R,j,'legend');
         ERR(i,j) = reg.CVMAE;
         REG(i,j).r = reg;
         REG(i,j).Vars = VarNames(lmn);
