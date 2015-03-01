@@ -10,12 +10,14 @@ VFSolv1 = Old.VFSolv1;
 Updated = Old;
 
 if isnan(Solv2)
+    disp(Old.Author)
     SolvProps = Prop_Lookup(Solv1);
     P3HTProps = Prop_Lookup('P3HT');
     HR = sqrt(sum([4; 1; 1].*([SolvProps(1:3)-P3HTProps(1:3)].^2)));
     Updated.HR = HR;
     UPdated.BP = SolvProps(4);
 else
+    disp(Old.Author)
     Solv1Props = Prop_Lookup(Solv1);
     Solv2Props = Prop_Lookup(Solv2);
     P3HTProps = Prop_Lookup('P3HT');

@@ -1,5 +1,6 @@
 function out = Prop_Lookup(Name)
 
+disp(Name)
 % Given 'Name' (a string), find a Nx1 vector [dd; dp; dh; BP] from the solvent
 % library and put it in OUT
 L = load('SolvLib.mat');
