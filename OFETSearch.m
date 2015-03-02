@@ -32,7 +32,11 @@ for c = 1:NumConst
     Filtered = OFETFilter(Filtered,Field,HoldValue);
 end
 
-Trends = [[Filtered(:).(Variable)]' [Filtered(:).RTMob]'];
+X1 = [Filtered(:).(Variable)]';
+Y1 = [Filtered(:).RTMob]';
+disp(size(X1))
+disp(size(Y1))
+Trends = [X1 Y1];
 
 figure1 = figure;
 X1 = Trends(:,1);
