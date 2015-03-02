@@ -25,12 +25,19 @@ load('OFETDatabase.mat');
 Filtered = OFET; % Start with the full structure
 
 NumConst = size(Constants,1);
-
-for c = 1:NumConst
-    Field = Constants{c,1};
-    HoldValue = Constants{c,2};
-    Filtered = OFETFilter(Filtered,Field,HoldValue);
+if NumConst<1
+    
+    for c = 1:NumConst
+        Field = Constants{c,1};
+        HoldValue = Constants{c,2};
+        Filtered = OFETFilter(Filtered,Field,HoldValue);
+    end
+else
 end
+
+% Remove Devices that don't have a reported value for "Variable"
+
+Filtered = RemoveNans(Filtered,Variable);
 
 X1 = [Filtered(:).(Variable)]';
 Y1 = [Filtered(:).RTMob]';
