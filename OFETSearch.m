@@ -24,8 +24,8 @@ load('OFETDatabase.mat');
 
 Filtered = OFET; % Start with the full structure
 
-NumConst = size(Constants,1);
-if NumConst<1
+NumConst = size(Constants,1); % How many constraints are there
+if NumConst>0
     
     for c = 1:NumConst
         Field = Constants{c,1};
@@ -42,22 +42,28 @@ Filtered = RemoveNans(Filtered,Variable);
 X1 = [Filtered(:).(Variable)]';
 Y1 = [Filtered(:).RTMob]';
 disp(size(X1))
-disp(size(Y1))
+% disp(size(Y1))
 Trends = [X1 Y1];
 
-figure1 = figure;
 X1 = Trends(:,1);
 Y1 = Trends(:,2);
 
+% Create figure
+figure1 = figure;
+
 % Create axes
-axes1 = axes('Parent',figure1,'FontSize',14);
+axes1 = axes('Parent',figure1,'YScale','log','FontSize',14);
 box(axes1,'on');
 hold(axes1,'on');
-xlabel(Variable)
-ylabel('Mobility (cm^2/V*s)')
 
-% Create plot
-plot(X1,Y1,'MarkerSize',8,'Marker','o','LineStyle','none','Color',[0 0 1]);
+% Create ylabel
+ylabel('Mobility (cm^2/V*s)');
 
+% Create xlabel
+xlabel(Variable);
+
+% Create semilogy
+semilogy(X1,Y1,'MarkerSize',8,'Marker','o','LineStyle','none',...
+    'Color',[0 0 1]);
 
 end
