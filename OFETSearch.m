@@ -57,13 +57,13 @@ box(axes1,'on');
 hold(axes1,'on');
 
 % Create ylabel
-ylabel('Mobility (cm^2/V*s)');
+ylabel('Mobility (cm^2/Vs)');
 
 % Create xlabel
 xlabel(Variable);
 
 % Create semilogy
-semilogy(X1,Y1,'MarkerSize',8,'Marker','o','LineStyle','none',...
+semilogy(X1,Y1,'MarkerSize',6,'Marker','+','LineStyle','none',...
     'Color',[0 0 1]);
 
 end
